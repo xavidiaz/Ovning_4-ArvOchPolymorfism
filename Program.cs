@@ -13,12 +13,12 @@ public class Washer
     }
     public void StartWash()
     {
-        Console.WriteLine("Start Washer.");
+        Console.WriteLine($"{Brand} washer starts washing.");
     }
 
     public void StopWash()
     {
-        Console.WriteLine("Stop Washer.");
+        Console.WriteLine($"{Brand} washer stops washing.");
     }
 
     public void PrintWashEnergy()
@@ -40,12 +40,12 @@ public class Refrigerator
 
     public void StartCooling()
     {
-        Console.WriteLine("Start Cooling.");
+        Console.WriteLine($"{Brand} refrigerator starts cooling.");
     }
 
     public void StopCooling()
     {
-        Console.WriteLine("Stop Cooling.");
+        Console.WriteLine($"{Brand} refrigerator stops cooling.");
     }
 
     public void PrintCoolingEnergy()
@@ -65,14 +65,14 @@ public class Oven
         MaxTemperature = maxtemperature;
     }
 
-    public void StartCooling()
+    public void StartHeating()
     {
-        Console.WriteLine("Start Cleaning.");
+        Console.WriteLine($"{Brand} oven starts heating.");
     }
 
-    public void StopCleaning()
+    public void StopHeating()
     {
-        Console.WriteLine("Stop Cleaning.");
+        Console.WriteLine($"{Brand} oven stops heating.");
     }
 
     public void PrintCleaningEnergy()
@@ -94,12 +94,12 @@ public class RobotVacuum
 
     public void StartRobotVacuum()
     {
-        Console.WriteLine("Start RobotVacuum.");
+        Console.WriteLine($"{Brand} robot vacuum starts cleaning.");
     }
 
     public void StopRobotVacuum()
     {
-        Console.WriteLine("Stop RobotVacuum.");
+        Console.WriteLine($"{Brand} robot vacuum stops cleaning");
     }
 
     public void PrintRobotVacuumEnergy()
@@ -119,9 +119,9 @@ class Program
 
         List<object> devices = new List<object>()
         {
-        new Washer("Electrolux", 5000),
-        new Refrigerator("Bosh", 3000),
-        new Oven("Franke", 6000),
+        new Washer("LG", 5000),
+        new Refrigerator("Samsung", 3000),
+        new Oven("Elextrolux", 6000),
         new RobotVacuum("Xiamomi", 500),
         };
 
@@ -136,9 +136,46 @@ class Program
         {
             // TODO:
             // 1. Kontrollera vilken typ device är.
+            object deviceType = device.GetType().Name;
             // 2. Casta till rätt typ.
             // 3. Anropa rätt startmetod.
             // 4. Anropa rätt stoppmetod.
+            switch (deviceType)
+            {
+                case "Washer":
+                    if (device is Washer washer)
+                    {
+                        washer.StartWash();
+                        washer.StopWash();
+                    }
+                    break;
+                case "Refrigerator":
+                    if (device is Refrigerator refrigerator)
+                    {
+                        refrigerator.StartCooling();
+                        refrigerator.StartCooling();
+                    }
+                    break;
+                case "Oven":
+                    if (device is Oven oven)
+                    {
+                        oven.StartHeating();
+                        oven.StartHeating();
+                    }
+                    break;
+                case "RobotVacuum":
+                    if (device is RobotVacuum robotVacuum)
+                    {
+                        robotVacuum.StartRobotVacuum();
+                        robotVacuum.StopRobotVacuum();
+                    }
+                    break;
+                default:
+                    Console.WriteLine("Unkknown deviceType!");
+                    break;
+            }
+
+
         }
     }
 
