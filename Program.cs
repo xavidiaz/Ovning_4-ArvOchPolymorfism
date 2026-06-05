@@ -6,7 +6,7 @@ public class Washer
     public string Brand { get; }
     public double CapacityKg { get; }
 
-    public Washer(string brand, double capacityKg)
+    public Washer(string brand, double capacityKg = 0)
     {
         Brand = brand;
         CapacityKg = capacityKg;
@@ -32,7 +32,7 @@ public class Refrigerator
     public string Brand { get; }
     public double Temperature { get; }
 
-    public Refrigerator(string brand, double temperature)
+    public Refrigerator(string brand, double temperature = 0)
     {
         Brand = brand;
         Temperature = temperature;
@@ -59,7 +59,7 @@ public class Oven
     public string Brand { get; }
     public double MaxTemperature { get; }
 
-    public Oven(string brand, double maxtemperature)
+    public Oven(string brand, double maxtemperature = 0)
     {
         Brand = brand;
         MaxTemperature = maxtemperature;
@@ -86,7 +86,7 @@ public class RobotVacuum
     public string Brand { get; }
     public double BatteryLevel { get; }
 
-    public RobotVacuum(string brand, double batteryLevel)
+    public RobotVacuum(string brand, double batteryLevel = 0)
     {
         Brand = brand;
         BatteryLevel = batteryLevel;
@@ -108,6 +108,33 @@ public class RobotVacuum
     }
 }
 
+public class CoffeeMachine
+{
+    public string Brand { get; }
+    public double CupsPerBrew { get; }
+
+    public CoffeeMachine(string brand, int cups = 0)
+    {
+        Brand = brand;
+        CupsPerBrew = cups;
+    }
+
+    public void StartBrewing()
+    {
+        Console.WriteLine($"{Brand} coffee machine starts brewing.");
+    }
+
+    public void StopBrewing()
+    {
+        Console.WriteLine($"{Brand} coffe machine stops brewing.");
+    }
+
+    public void PrintBrewingEnergy()
+    {
+        Console.WriteLine($"{Brand} coffe machine uses 0.01 kwh per coffe cups.");
+    }
+}
+
 class Program
 {
     static void Main()
@@ -119,10 +146,11 @@ class Program
 
         List<object> devices = new List<object>()
         {
-        new Washer("LG", 1.2),
-        new Refrigerator("Samsung", 3.6),
-        new Oven("Elextrolux", 2.5),
-        new RobotVacuum("Xiamomi", 0.4),
+        new Washer("LG"),
+        new Refrigerator("Samsung"),
+        new Oven("Elextrolux"),
+        new RobotVacuum("Xiamomi"),
+        new CoffeeMachine("Nespresso")
         };
 
         RunMorningRoutine(devices);
@@ -153,14 +181,14 @@ class Program
                     if (device is Refrigerator refrigerator)
                     {
                         refrigerator.StartCooling();
-                        refrigerator.StartCooling();
+                        refrigerator.StopCooling();
                     }
                     break;
                 case "Oven":
                     if (device is Oven oven)
                     {
                         oven.StartHeating();
-                        oven.StartHeating();
+                        oven.StopHeating();
                     }
                     break;
                 case "RobotVacuum":
@@ -168,6 +196,13 @@ class Program
                     {
                         robotVacuum.StartRobotVacuum();
                         robotVacuum.StopRobotVacuum();
+                    }
+                    break;
+                case "CoffeeMachine":
+                    if (device is CoffeeMachine coffeeMachine)
+                    {
+                        coffeeMachine.StartBrewing();
+                        coffeeMachine.StopBrewing();
                     }
                     break;
                 default:
@@ -215,6 +250,12 @@ class Program
                         robotVacuum.PrintRobotVacuumEnergy();
                     }
                     break;
+                case "CoffeeMachine":
+                    if (device is CoffeeMachine coffeeMachine)
+                    {
+                        coffeeMachine.PrintBrewingEnergy();
+                    }
+                    break;
                 default:
                     Console.WriteLine("Unkknown deviceType!");
                     break;
@@ -222,7 +263,7 @@ class Program
         }
     }
 }
-// FRÅGÅR
+// FRÅGÅ
 // 1. Varför behövde du kontrollera vilken typ varje objekt hade?
 // För att Anropa rött metod
 //
@@ -230,10 +271,18 @@ class Program
 // Inget om vi inte addera ny 'device' i listan och ny 'case' i 'RunMorningRoutine()'.
 // 
 // 3. Vilka metoder måste du ändra om du lägger till CoffeeMachine?
-// Inget att ändra. Det ska skappas nya metoder och addera 'cases'. Vi inte återanvända kod ens.
+// Det ska ändras 'RunMorningRoutine()' och 'ReportAllEnergy()'.
 //
 // 4. Vad är problemet med att listan är List<object>?
-// Att vi vet inte vad är för var är för typ object. Det är Generic, skulle vara mer uidiomatisk me 'List<Washer>' för exempel.
+// Att vi vet inte vad är för var är för typ object, LSP/kompilator kan inte hjälpa till att anropa rätt metoder. Det är Generic, skulle vara mer uidiomatisk me 'List<Washer>' för exempel.
 //
 // 5. Vad händer om du råkar glömma en apparattyp i ReportAllEnergy()?
 // Det kommer inte att printas ut. Etersom decice typer är liksom hardkoddad.
+//
+// 6. Hur många ställen i koden behövde du ändra för att systemet skulle fungera med CoffeeMachine?
+// - addera ny coffe object till listan.
+// - 'RunMorningRoutine()'
+// - 'ReportAllEnergy()'
+// Jag  hade att lägga till på 3 olika ställen.
+//
+// 
