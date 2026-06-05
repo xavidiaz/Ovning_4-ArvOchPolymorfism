@@ -199,115 +199,27 @@ class Program
 {
     static void Main()
     {
-        List<object> devices = new List<object>()
+        List<Appliance> devices = new()
         {
-        new Washer("LG"),
-        new Refrigerator("Samsung"),
-        new Oven("Elextrolux"),
-        new RobotVacuum("Xiamomi"),
-        new CoffeeMachine("Nespresso")
+          new Washer("LG"),
+          new Refrigerator("Samsung"),
+          new Oven("Elextrolux"),
+          new RobotVacuum("Xiamomi"),
+          new CoffeeMachine("Nespresso")
         };
 
-        RunMorningRoutine(devices);
+        foreach (Appliance device in devices)
+        {
+            device.GetInfo();
+            device.TurnOn();
+            device.GetDailyEnergyUsage();
+            device.TurnOff();
+        }
+
         Console.WriteLine();
-        ReportAllEnergy(devices);
     }
 
-    static void RunMorningRoutine(List<object> devices)
-    {
-        foreach (object device in devices)
-        {
-            object deviceType = device.GetType().Name;
-            switch (deviceType)
-            {
-                case "Washer":
-                    if (device is Washer washer)
-                    {
-                        washer.TurnOn();
-                        washer.TurnOff();
-                    }
-                    break;
-                case "Refrigerator":
-                    if (device is Refrigerator refrigerator)
-                    {
-                        refrigerator.TurnOn();
-                        refrigerator.TurnOff();
-                    }
-                    break;
-                case "Oven":
-                    if (device is Oven oven)
-                    {
-                        oven.TurnOn();
-                        oven.TurnOff();
-                    }
-                    break;
-                case "RobotVacuum":
-                    if (device is RobotVacuum robotVacuum)
-                    {
-                        robotVacuum.TurnOn();
-                        robotVacuum.TurnOff();
-                    }
-                    break;
-                case "CoffeeMachine":
-                    if (device is CoffeeMachine coffeeMachine)
-                    {
-                        coffeeMachine.TurnOn();
-                        coffeeMachine.TurnOff();
-                    }
-                    break;
-                default:
-                    Console.WriteLine("Unkknown deviceType!");
-                    break;
-            }
 
-
-        }
-    }
-
-    static void ReportAllEnergy(List<object> devices)
-    {
-        foreach (object device in devices)
-        {
-            object deviceType = device.GetType().Name;
-            switch (deviceType)
-
-            {
-                case "Washer":
-                    if (device is Washer washer)
-                    {
-                        Console.WriteLine(washer.GetDailyEnergyUsage());
-                    }
-                    break;
-                case "Refrigerator":
-                    if (device is Refrigerator refrigerator)
-                    {
-                        Console.WriteLine(refrigerator.GetDailyEnergyUsage());
-                    }
-                    break;
-                case "Oven":
-                    if (device is Oven oven)
-                    {
-                        Console.WriteLine(oven.GetDailyEnergyUsage());
-                    }
-                    break;
-                case "RobotVacuum":
-                    if (device is RobotVacuum robotVacuum)
-                    {
-                        Console.WriteLine(robotVacuum.GetDailyEnergyUsage());
-                    }
-                    break;
-                case "CoffeeMachine":
-                    if (device is CoffeeMachine coffeeMachine)
-                    {
-                        Console.WriteLine();
-                    }
-                    break;
-                default:
-                    Console.WriteLine("Unkknown deviceType!");
-                    break;
-            }
-        }
-    }
 }
 // FRÅGÅ
 // 1. Varför behövde du kontrollera vilken typ varje objekt hade?
@@ -331,4 +243,12 @@ class Program
 // - 'ReportAllEnergy()'
 // Jag  hade att lägga till på 3 olika ställen.
 //
+// Frågor efter Del 5
+// 1. Varför fungerar device.TurnOn() trots att device har typen Appliance?
+// Etersom 'Appliance' klass har metoden 'TurnOn()'.
 // 
+// 2.Vilken metod körs om objektet egentligen är en RobotVacuum?
+// Den anpadase metoden av 'RobotVacuum' från basklassen 'Appliance'.
+//
+// 3. Vad blev bättre jämfört med List<object>?
+// Det behövs inte längre declarers metoder 'RunMorningRoutine()' och 'ReportAllEnergy()'.
