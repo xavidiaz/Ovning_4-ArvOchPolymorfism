@@ -36,137 +36,162 @@ public class Appliance
     }
 }
 
-public class Washer
+public class Washer : Appliance
 {
-    public string Brand { get; }
     public double CapacityKg { get; }
 
-    public Washer(string brand, double capacityKg = 0)
+    public Washer(string brand, string room = "No assigned.", double capacityKg = 0) : base(brand, room)
     {
-        Brand = brand;
         CapacityKg = capacityKg;
     }
-    public void StartWash()
+
+    public override string GetInfo()
     {
-        Console.WriteLine($"{Brand} washer starts washing.");
+        return $"{Brand} washer ({CapacityKg} kg) in {Room})";
     }
 
-    public void StopWash()
+    public override void TurnOn()
     {
-        Console.WriteLine($"{Brand} washer stops washing.");
+        base.TurnOn();
+        Console.WriteLine($"{Brand} washer starts washing program.");
     }
 
-    public void PrintWashEnergy()
+    public override void TurnOff()
     {
-        Console.WriteLine($"{Brand} Washer uses 1.2 kwh per wash.");
+        base.TurnOff();
+        Console.WriteLine($"{Brand} washer finished washing program.");
+    }
+    public override double GetDailyEnergyUsage()
+    {
+        return 1.2;
     }
 }
 
-public class Refrigerator
+public class Refrigerator : Appliance
 {
-    public string Brand { get; }
     public double Temperature { get; }
 
-    public Refrigerator(string brand, double temperature = 0)
+    public Refrigerator(string brand, string room = "No assigned.", double temperature = 0) : base(brand, room)
     {
-        Brand = brand;
         Temperature = temperature;
     }
 
-    public void StartCooling()
+    public override string GetInfo()
     {
+        return $"{Brand} refrigerator ({Temperature} C) in room {Room}";
+    }
+
+    public override void TurnOn()
+    {
+        base.TurnOn();
         Console.WriteLine($"{Brand} refrigerator starts cooling.");
     }
 
-    public void StopCooling()
+    public override void TurnOff()
     {
+        base.TurnOff();
         Console.WriteLine($"{Brand} refrigerator stops cooling.");
     }
 
-    public void PrintCoolingEnergy()
+    public override double GetDailyEnergyUsage()
     {
-        Console.WriteLine($"{Brand} refrigerator uses 3.6 kwh per day.");
+        return 3.6;
     }
 }
 
-public class Oven
+public class Oven : Appliance
 {
-    public string Brand { get; }
     public double MaxTemperature { get; }
 
-    public Oven(string brand, double maxtemperature = 0)
+    public Oven(string brand, string room = "No assigned.", double maxtemperature = 0) : base(brand, room)
     {
-        Brand = brand;
         MaxTemperature = maxtemperature;
     }
 
-    public void StartHeating()
+    public override string GetInfo()
     {
-        Console.WriteLine($"{Brand} oven starts heating.");
+        return $"{Brand} oven (Max temperature {MaxTemperature} C) in room {Room}";
+    }
+    public override void TurnOn()
+    {
+        base.TurnOn();
+        Console.WriteLine($"{Brand} oven starts heating");
     }
 
-    public void StopHeating()
+    public override void TurnOff()
     {
-        Console.WriteLine($"{Brand} oven stops heating.");
+        base.TurnOff();
+        Console.WriteLine($"{Brand} oven is stops heating");
     }
 
-    public void PrintCleaningEnergy()
+    public override double GetDailyEnergyUsage()
     {
-        Console.WriteLine($"{Brand} oven uses 2.5 kwh per hour.");
+        return 2.5;
     }
 }
 
-public class RobotVacuum
+public class RobotVacuum : Appliance
 {
-    public string Brand { get; }
     public double BatteryLevel { get; }
 
-    public RobotVacuum(string brand, double batteryLevel = 0)
+    public RobotVacuum(string brand, string room = "No assigned.", double batteryLevel = 0) : base(brand, room)
     {
-        Brand = brand;
         BatteryLevel = batteryLevel;
     }
 
-    public void StartRobotVacuum()
+    public override string GetInfo()
     {
-        Console.WriteLine($"{Brand} robot vacuum starts cleaning.");
+        return $"{Brand} robot vacuum (batteryLevel = {BatteryLevel}) is in room {Room}";
     }
 
-    public void StopRobotVacuum()
+    public override void TurnOn()
     {
-        Console.WriteLine($"{Brand} robot vacuum stops cleaning");
+        base.TurnOn();
+        Console.WriteLine($"{Brand} robot vacuum is starting.");
     }
 
-    public void PrintRobotVacuumEnergy()
+    public override void TurnOff()
     {
-        Console.WriteLine($"{Brand} robot vacuum uses 0.4 kwh per cleaning.");
+        base.TurnOff();
+        Console.WriteLine($"{Brand} robot vacuum is stopping.");
+    }
+
+    public override double GetDailyEnergyUsage()
+    {
+        return 0.4;
     }
 }
 
-public class CoffeeMachine
+
+public class CoffeeMachine : Appliance
 {
-    public string Brand { get; }
     public double CupsPerBrew { get; }
 
-    public CoffeeMachine(string brand, int cups = 0)
+    public CoffeeMachine(string brand, string room = "No assigned.", int cups = 0) : base(brand, room)
     {
-        Brand = brand;
         CupsPerBrew = cups;
     }
 
-    public void StartBrewing()
+    public override string GetInfo()
     {
-        Console.WriteLine($"{Brand} coffee machine starts brewing.");
+        return $"{Brand} coffe machine ({CupsPerBrew} per brew) in room {Room}";
     }
 
-    public void StopBrewing()
+    public override void TurnOn()
     {
-        Console.WriteLine($"{Brand} coffe machine stops brewing.");
+        base.TurnOn();
+        Console.WriteLine($"{Brand} coffe machine is brewing coffe.");
     }
 
-    public void PrintBrewingEnergy()
+    public override void TurnOff()
     {
-        Console.WriteLine($"{Brand} coffe machine uses 0.01 kwh per coffe cups.");
+        base.TurnOff();
+        Console.WriteLine($"{Brand} coffe machine finished brewing coffe.");
+    }
+
+    public override double GetDailyEnergyUsage()
+    {
+        return 0.3;
     }
 }
 
@@ -174,11 +199,6 @@ class Program
 {
     static void Main()
     {
-        // TODO:
-        // Skapa minst fyra objekt:
-        // Washer, Refrigerator, Oven och RobotVacuum.
-        // Lägg till dem i listan devices.
-
         List<object> devices = new List<object>()
         {
         new Washer("LG"),
@@ -197,47 +217,42 @@ class Program
     {
         foreach (object device in devices)
         {
-            // TODO:
-            // 1. Kontrollera vilken typ device är.
             object deviceType = device.GetType().Name;
-            // 2. Casta till rätt typ.
-            // 3. Anropa rätt startmetod.
-            // 4. Anropa rätt stoppmetod.
             switch (deviceType)
             {
                 case "Washer":
                     if (device is Washer washer)
                     {
-                        washer.StartWash();
-                        washer.StopWash();
+                        washer.TurnOn();
+                        washer.TurnOff();
                     }
                     break;
                 case "Refrigerator":
                     if (device is Refrigerator refrigerator)
                     {
-                        refrigerator.StartCooling();
-                        refrigerator.StopCooling();
+                        refrigerator.TurnOn();
+                        refrigerator.TurnOff();
                     }
                     break;
                 case "Oven":
                     if (device is Oven oven)
                     {
-                        oven.StartHeating();
-                        oven.StopHeating();
+                        oven.TurnOn();
+                        oven.TurnOff();
                     }
                     break;
                 case "RobotVacuum":
                     if (device is RobotVacuum robotVacuum)
                     {
-                        robotVacuum.StartRobotVacuum();
-                        robotVacuum.StopRobotVacuum();
+                        robotVacuum.TurnOn();
+                        robotVacuum.TurnOff();
                     }
                     break;
                 case "CoffeeMachine":
                     if (device is CoffeeMachine coffeeMachine)
                     {
-                        coffeeMachine.StartBrewing();
-                        coffeeMachine.StopBrewing();
+                        coffeeMachine.TurnOn();
+                        coffeeMachine.TurnOff();
                     }
                     break;
                 default:
@@ -253,42 +268,38 @@ class Program
     {
         foreach (object device in devices)
         {
-            // TODO:
-            // 1. Kontrollera vilken typ device är.
             object deviceType = device.GetType().Name;
-
-            // 2. Casta till rätt typ.
-            // 3. Anropa rätt energimetod.
             switch (deviceType)
+
             {
                 case "Washer":
                     if (device is Washer washer)
                     {
-                        washer.PrintWashEnergy();
+                        Console.WriteLine(washer.GetDailyEnergyUsage());
                     }
                     break;
                 case "Refrigerator":
                     if (device is Refrigerator refrigerator)
                     {
-                        refrigerator.PrintCoolingEnergy();
+                        Console.WriteLine(refrigerator.GetDailyEnergyUsage());
                     }
                     break;
                 case "Oven":
                     if (device is Oven oven)
                     {
-                        oven.PrintCleaningEnergy();
+                        Console.WriteLine(oven.GetDailyEnergyUsage());
                     }
                     break;
                 case "RobotVacuum":
                     if (device is RobotVacuum robotVacuum)
                     {
-                        robotVacuum.PrintRobotVacuumEnergy();
+                        Console.WriteLine(robotVacuum.GetDailyEnergyUsage());
                     }
                     break;
                 case "CoffeeMachine":
                     if (device is CoffeeMachine coffeeMachine)
                     {
-                        coffeeMachine.PrintBrewingEnergy();
+                        Console.WriteLine();
                     }
                     break;
                 default:
