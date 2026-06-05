@@ -251,6 +251,33 @@ public class CoffeeMachine : Appliance
     }
 }
 
+public class AirConditioner : Appliance
+{
+    public double TargetTemperature { get; }
+    public AirConditioner(string brand, string room = "No assigned", int targetTemperature = 0) : base(brand, room)
+    {
+        TargetTemperature = targetTemperature;
+    }
+    public override string GetInfo()
+    {
+        return $"{Brand} air conditioner (Target: {TargetTemperature} C) in {Room} - {(IsOn ? "ON" : "OFF")}";
+    }
+    public override void TurnOn()
+    {
+        base.TurnOn();
+        Console.WriteLine($"{Brand} air conditioner starts cooling to {TargetTemperature} C.");
+    }
+    public override void TurnOff()
+    {
+        base.TurnOff();
+        Console.WriteLine($"{Brand} air conditioner stops cooling.");
+    }
+    public override double GetDailyEnergyUsage()
+    {
+        return 4.5;
+    }
+}
+
 class Program
 {
     static void Main()
@@ -262,6 +289,7 @@ class Program
         controller.AddDevice(new Oven("Electrolux", "Kitchen", 250));
         controller.AddDevice(new RobotVacuum("Xiaomi", "Living", 100));
         controller.AddDevice(new CoffeeMachine("Nespresso", "Kitchen", 6));
+        controller.AddDevice(new AirConditioner("Daikin", "Bedroom", 22));
 
         controller.PrintStatusReport();
         Console.WriteLine();
