@@ -23,7 +23,7 @@ public class Washer
 
     public void PrintWashEnergy()
     {
-        Console.WriteLine("Wash energi xxx.");
+        Console.WriteLine($"{Brand} Washer uses 1.2 kwh per wash.");
     }
 }
 
@@ -50,7 +50,7 @@ public class Refrigerator
 
     public void PrintCoolingEnergy()
     {
-        Console.WriteLine("Cooling energi xxx.");
+        Console.WriteLine($"{Brand} refrigerator uses 3.6 kwh per day.");
     }
 }
 
@@ -77,7 +77,7 @@ public class Oven
 
     public void PrintCleaningEnergy()
     {
-        Console.WriteLine("Cleaning energi xxx.");
+        Console.WriteLine($"{Brand} oven uses 2.5 kwh per hour.");
     }
 }
 
@@ -104,7 +104,7 @@ public class RobotVacuum
 
     public void PrintRobotVacuumEnergy()
     {
-        Console.WriteLine("RobotVacuum energi xxx");
+        Console.WriteLine($"{Brand} robot vacuum uses 0.4 kwh per cleaning.");
     }
 }
 
@@ -119,10 +119,10 @@ class Program
 
         List<object> devices = new List<object>()
         {
-        new Washer("LG", 5000),
-        new Refrigerator("Samsung", 3000),
-        new Oven("Elextrolux", 6000),
-        new RobotVacuum("Xiamomi", 500),
+        new Washer("LG", 1.2),
+        new Refrigerator("Samsung", 3.6),
+        new Oven("Elextrolux", 2.5),
+        new RobotVacuum("Xiamomi", 0.4),
         };
 
         RunMorningRoutine(devices);
@@ -185,8 +185,55 @@ class Program
         {
             // TODO:
             // 1. Kontrollera vilken typ device är.
+            object deviceType = device.GetType().Name;
+
             // 2. Casta till rätt typ.
             // 3. Anropa rätt energimetod.
+            switch (deviceType)
+            {
+                case "Washer":
+                    if (device is Washer washer)
+                    {
+                        washer.PrintWashEnergy();
+                    }
+                    break;
+                case "Refrigerator":
+                    if (device is Refrigerator refrigerator)
+                    {
+                        refrigerator.PrintCoolingEnergy();
+                    }
+                    break;
+                case "Oven":
+                    if (device is Oven oven)
+                    {
+                        oven.PrintCleaningEnergy();
+                    }
+                    break;
+                case "RobotVacuum":
+                    if (device is RobotVacuum robotVacuum)
+                    {
+                        robotVacuum.PrintRobotVacuumEnergy();
+                    }
+                    break;
+                default:
+                    Console.WriteLine("Unkknown deviceType!");
+                    break;
+            }
         }
     }
 }
+// FRÅGÅR
+// 1. Varför behövde du kontrollera vilken typ varje objekt hade?
+// För att Anropa rött metod
+//
+// 2. Vad händer om du lägger till en ny klass CoffeeMachine?
+// Inget om vi inte addera ny 'device' i listan och ny 'case' i 'RunMorningRoutine()'.
+// 
+// 3. Vilka metoder måste du ändra om du lägger till CoffeeMachine?
+// Inget att ändra. Det ska skappas nya metoder och addera 'cases'. Vi inte återanvända kod ens.
+//
+// 4. Vad är problemet med att listan är List<object>?
+// Att vi vet inte vad är för var är för typ object. Det är Generic, skulle vara mer uidiomatisk me 'List<Washer>' för exempel.
+//
+// 5. Vad händer om du råkar glömma en apparattyp i ReportAllEnergy()?
+// Det kommer inte att printas ut. Etersom decice typer är liksom hardkoddad.
