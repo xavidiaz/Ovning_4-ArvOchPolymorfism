@@ -1,137 +1,280 @@
 ﻿using System;
 using System.Collections.Generic;
 
-public class Washer
+public class SmartHomeController
 {
-    public string Brand { get; }
-    public double CapacityKg { get; }
+    private List<Appliance> _devices = new List<Appliance>();
 
-    public Washer(string brand, double capacityKg = 0)
+    public void AddDevice(Appliance device)
     {
-        Brand = brand;
-        CapacityKg = capacityKg;
-    }
-    public void StartWash()
-    {
-        Console.WriteLine($"{Brand} washer starts washing.");
+        // TODO:
+        // Lägg till device i listan.
+        _devices.Add(device);
     }
 
-    public void StopWash()
+    public void TurnOnAll()
     {
-        Console.WriteLine($"{Brand} washer stops washing.");
+        // TODO:
+        // Loopa igenom alla devices och starta dem.
+        // Du får inte använda if/switch på specifika klasser.
+        foreach (Appliance device in _devices)
+        {
+            device.TurnOn();
+        }
     }
 
-    public void PrintWashEnergy()
+    public void TurnOffAll()
     {
-        Console.WriteLine($"{Brand} Washer uses 1.2 kwh per wash.");
+        // TODO:
+        // Loopa igenom alla devices och stäng av dem.
+        foreach (Appliance device in _devices)
+        {
+            device.TurnOff();
+        }
+    }
+
+    public void PrintStatusReport()
+    {
+        // TODO:
+        // Loopa igenom alla devices.
+        // Skriv ut GetInfo() och om apparaten är på eller av.
+        foreach (Appliance device in _devices)
+        {
+            Console.WriteLine(device.GetInfo());
+        }
+    }
+
+    public double GetTotalDailyEnergyUsage()
+    {
+        // TODO:
+        // Räkna ihop GetDailyEnergyUsage() för alla devices.
+        // Returnera totalsumman.
+        double totalsumman = 0;
+        foreach (Appliance device in _devices)
+        {
+            totalsumman += device.GetDailyEnergyUsage();
+        }
+        return totalsumman;
     }
 }
 
-public class Refrigerator
+public class Appliance
 {
     public string Brand { get; }
-    public double Temperature { get; }
+    public string Room { get; }
+    public bool IsOn { get; protected set; }
 
-    public Refrigerator(string brand, double temperature = 0)
+    public Appliance(string brand, string room)
     {
         Brand = brand;
+        Room = room;
+    }
+
+    public virtual string GetInfo()
+    {
+        return $"{Brand} in {Room} room";
+    }
+
+    public virtual void TurnOn()
+    {
+        IsOn = true;
+    }
+
+    public virtual void TurnOff()
+    {
+        IsOn = false;
+    }
+
+    public virtual double GetDailyEnergyUsage()
+    {
+        // Returnera 0 som standardvärde.
+        return 0;
+    }
+}
+
+public class Washer : Appliance
+{
+    public double CapacityKg { get; }
+
+    public Washer(string brand, string room = "No assigned.", double capacityKg = 0) : base(brand, room)
+    {
+        CapacityKg = capacityKg;
+    }
+
+    public override string GetInfo()
+    {
+        return $"{Brand} washer ({CapacityKg} kg) in {Room} room - {(IsOn ? "ON" : "OFF")}";
+    }
+
+    public override void TurnOn()
+    {
+        base.TurnOn();
+        Console.WriteLine($"{Brand} washer starts washing program.");
+    }
+
+    public override void TurnOff()
+    {
+        base.TurnOff();
+        Console.WriteLine($"{Brand} washer finished washing program.");
+    }
+    public override double GetDailyEnergyUsage()
+    {
+        return 1.2;
+    }
+}
+
+public class Refrigerator : Appliance
+{
+    public double Temperature { get; }
+
+    public Refrigerator(string brand, string room = "No assigned.", double temperature = 0) : base(brand, room)
+    {
         Temperature = temperature;
     }
 
-    public void StartCooling()
+    public override string GetInfo()
     {
+        return $"{Brand} refrigerator ({Temperature} C) in {Room} room - {(IsOn ? "ON" : "OFF")}";
+    }
+
+    public override void TurnOn()
+    {
+        base.TurnOn();
         Console.WriteLine($"{Brand} refrigerator starts cooling.");
     }
 
-    public void StopCooling()
+    public override void TurnOff()
     {
+        base.TurnOff();
         Console.WriteLine($"{Brand} refrigerator stops cooling.");
     }
 
-    public void PrintCoolingEnergy()
+    public override double GetDailyEnergyUsage()
     {
-        Console.WriteLine($"{Brand} refrigerator uses 3.6 kwh per day.");
+        return 3.6;
     }
 }
 
-public class Oven
+public class Oven : Appliance
 {
-    public string Brand { get; }
     public double MaxTemperature { get; }
 
-    public Oven(string brand, double maxtemperature = 0)
+    public Oven(string brand, string room = "No assigned.", double maxtemperature = 0) : base(brand, room)
     {
-        Brand = brand;
         MaxTemperature = maxtemperature;
     }
 
-    public void StartHeating()
+    public override string GetInfo()
     {
-        Console.WriteLine($"{Brand} oven starts heating.");
+        return $"{Brand} oven (Max temperature {MaxTemperature} C) in {Room} room - {(IsOn ? "ON" : "OFF")}";
+    }
+    public override void TurnOn()
+    {
+        base.TurnOn();
+        Console.WriteLine($"{Brand} oven starts heating");
     }
 
-    public void StopHeating()
+    public override void TurnOff()
     {
-        Console.WriteLine($"{Brand} oven stops heating.");
+        base.TurnOff();
+        Console.WriteLine($"{Brand} oven is stops heating");
     }
 
-    public void PrintCleaningEnergy()
+    public override double GetDailyEnergyUsage()
     {
-        Console.WriteLine($"{Brand} oven uses 2.5 kwh per hour.");
+        return 2.5;
     }
 }
 
-public class RobotVacuum
+public class RobotVacuum : Appliance
 {
-    public string Brand { get; }
     public double BatteryLevel { get; }
 
-    public RobotVacuum(string brand, double batteryLevel = 0)
+    public RobotVacuum(string brand, string room = "No assigned.", double batteryLevel = 0) : base(brand, room)
     {
-        Brand = brand;
         BatteryLevel = batteryLevel;
     }
 
-    public void StartRobotVacuum()
+    public override string GetInfo()
     {
-        Console.WriteLine($"{Brand} robot vacuum starts cleaning.");
+        return $"{Brand} robot vacuum (batteryLevel = {BatteryLevel}) is in {Room} room - {(IsOn ? "ON" : "OFF")}";
     }
 
-    public void StopRobotVacuum()
+    public override void TurnOn()
     {
-        Console.WriteLine($"{Brand} robot vacuum stops cleaning");
+        base.TurnOn();
+        Console.WriteLine($"{Brand} robot vacuum is starting.");
     }
 
-    public void PrintRobotVacuumEnergy()
+    public override void TurnOff()
     {
-        Console.WriteLine($"{Brand} robot vacuum uses 0.4 kwh per cleaning.");
+        base.TurnOff();
+        Console.WriteLine($"{Brand} robot vacuum is stopping.");
+    }
+
+    public override double GetDailyEnergyUsage()
+    {
+        return 0.4;
     }
 }
 
-public class CoffeeMachine
+
+public class CoffeeMachine : Appliance
 {
-    public string Brand { get; }
     public double CupsPerBrew { get; }
 
-    public CoffeeMachine(string brand, int cups = 0)
+    public CoffeeMachine(string brand, string room = "No assigned.", int cups = 0) : base(brand, room)
     {
-        Brand = brand;
         CupsPerBrew = cups;
     }
 
-    public void StartBrewing()
+    public override string GetInfo()
     {
-        Console.WriteLine($"{Brand} coffee machine starts brewing.");
+        return $"{Brand} coffe machine ({CupsPerBrew} per brew) in {Room} room - {(IsOn ? "ON" : "OFF")}";
     }
 
-    public void StopBrewing()
+    public override void TurnOn()
     {
-        Console.WriteLine($"{Brand} coffe machine stops brewing.");
+        base.TurnOn();
+        Console.WriteLine($"{Brand} coffe machine is brewing coffe.");
     }
 
-    public void PrintBrewingEnergy()
+    public override void TurnOff()
     {
-        Console.WriteLine($"{Brand} coffe machine uses 0.01 kwh per coffe cups.");
+        base.TurnOff();
+        Console.WriteLine($"{Brand} coffe machine finished brewing coffe.");
+    }
+
+    public override double GetDailyEnergyUsage()
+    {
+        return 0.3;
+    }
+}
+
+public class AirConditioner : Appliance
+{
+    public double TargetTemperature { get; }
+    public AirConditioner(string brand, string room = "No assigned", int targetTemperature = 0) : base(brand, room)
+    {
+        TargetTemperature = targetTemperature;
+    }
+    public override string GetInfo()
+    {
+        return $"{Brand} air conditioner (Target: {TargetTemperature} C) in {Room} - {(IsOn ? "ON" : "OFF")}";
+    }
+    public override void TurnOn()
+    {
+        base.TurnOn();
+        Console.WriteLine($"{Brand} air conditioner starts cooling to {TargetTemperature} C.");
+    }
+    public override void TurnOff()
+    {
+        base.TurnOff();
+        Console.WriteLine($"{Brand} air conditioner stops cooling.");
+    }
+    public override double GetDailyEnergyUsage()
+    {
+        return 4.5;
     }
 }
 
@@ -139,129 +282,28 @@ class Program
 {
     static void Main()
     {
-        // TODO:
-        // Skapa minst fyra objekt:
-        // Washer, Refrigerator, Oven och RobotVacuum.
-        // Lägg till dem i listan devices.
+        SmartHomeController controller = new SmartHomeController();
 
-        List<object> devices = new List<object>()
-        {
-        new Washer("LG"),
-        new Refrigerator("Samsung"),
-        new Oven("Elextrolux"),
-        new RobotVacuum("Xiamomi"),
-        new CoffeeMachine("Nespresso")
-        };
+        controller.AddDevice(new Washer("LG", "Laundry", 7));
+        controller.AddDevice(new Refrigerator("Samsung", "Kitchen", 4));
+        controller.AddDevice(new Oven("Electrolux", "Kitchen", 250));
+        controller.AddDevice(new RobotVacuum("Xiaomi", "Living", 100));
+        controller.AddDevice(new CoffeeMachine("Nespresso", "Kitchen", 6));
+        controller.AddDevice(new AirConditioner("Daikin", "Bedroom", 22));
 
-        RunMorningRoutine(devices);
+        controller.PrintStatusReport();
         Console.WriteLine();
-        ReportAllEnergy(devices);
+        controller.TurnOnAll();
+        Console.WriteLine();
+
+        double totalEnergy = controller.GetTotalDailyEnergyUsage();
+        Console.WriteLine($"Total daily energy usage: {totalEnergy} kWh");
+        Console.WriteLine();
+
+        controller.TurnOffAll();
     }
 
-    static void RunMorningRoutine(List<object> devices)
-    {
-        foreach (object device in devices)
-        {
-            // TODO:
-            // 1. Kontrollera vilken typ device är.
-            object deviceType = device.GetType().Name;
-            // 2. Casta till rätt typ.
-            // 3. Anropa rätt startmetod.
-            // 4. Anropa rätt stoppmetod.
-            switch (deviceType)
-            {
-                case "Washer":
-                    if (device is Washer washer)
-                    {
-                        washer.StartWash();
-                        washer.StopWash();
-                    }
-                    break;
-                case "Refrigerator":
-                    if (device is Refrigerator refrigerator)
-                    {
-                        refrigerator.StartCooling();
-                        refrigerator.StopCooling();
-                    }
-                    break;
-                case "Oven":
-                    if (device is Oven oven)
-                    {
-                        oven.StartHeating();
-                        oven.StopHeating();
-                    }
-                    break;
-                case "RobotVacuum":
-                    if (device is RobotVacuum robotVacuum)
-                    {
-                        robotVacuum.StartRobotVacuum();
-                        robotVacuum.StopRobotVacuum();
-                    }
-                    break;
-                case "CoffeeMachine":
-                    if (device is CoffeeMachine coffeeMachine)
-                    {
-                        coffeeMachine.StartBrewing();
-                        coffeeMachine.StopBrewing();
-                    }
-                    break;
-                default:
-                    Console.WriteLine("Unkknown deviceType!");
-                    break;
-            }
 
-
-        }
-    }
-
-    static void ReportAllEnergy(List<object> devices)
-    {
-        foreach (object device in devices)
-        {
-            // TODO:
-            // 1. Kontrollera vilken typ device är.
-            object deviceType = device.GetType().Name;
-
-            // 2. Casta till rätt typ.
-            // 3. Anropa rätt energimetod.
-            switch (deviceType)
-            {
-                case "Washer":
-                    if (device is Washer washer)
-                    {
-                        washer.PrintWashEnergy();
-                    }
-                    break;
-                case "Refrigerator":
-                    if (device is Refrigerator refrigerator)
-                    {
-                        refrigerator.PrintCoolingEnergy();
-                    }
-                    break;
-                case "Oven":
-                    if (device is Oven oven)
-                    {
-                        oven.PrintCleaningEnergy();
-                    }
-                    break;
-                case "RobotVacuum":
-                    if (device is RobotVacuum robotVacuum)
-                    {
-                        robotVacuum.PrintRobotVacuumEnergy();
-                    }
-                    break;
-                case "CoffeeMachine":
-                    if (device is CoffeeMachine coffeeMachine)
-                    {
-                        coffeeMachine.PrintBrewingEnergy();
-                    }
-                    break;
-                default:
-                    Console.WriteLine("Unkknown deviceType!");
-                    break;
-            }
-        }
-    }
 }
 // FRÅGÅ
 // 1. Varför behövde du kontrollera vilken typ varje objekt hade?
@@ -285,4 +327,12 @@ class Program
 // - 'ReportAllEnergy()'
 // Jag  hade att lägga till på 3 olika ställen.
 //
+// Frågor efter Del 5
+// 1. Varför fungerar device.TurnOn() trots att device har typen Appliance?
+// Etersom 'Appliance' klass har metoden 'TurnOn()'.
 // 
+// 2.Vilken metod körs om objektet egentligen är en RobotVacuum?
+// Den anpadase metoden av 'RobotVacuum' från basklassen 'Appliance'.
+//
+// 3. Vad blev bättre jämfört med List<object>?
+// Det behövs inte längre declarers metoder 'RunMorningRoutine()' och 'ReportAllEnergy()'.
