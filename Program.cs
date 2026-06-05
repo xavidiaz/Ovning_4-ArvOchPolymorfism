@@ -1,6 +1,63 @@
 ﻿using System;
 using System.Collections.Generic;
 
+public class SmartHomeController
+{
+    private List<Appliance> _devices = new List<Appliance>();
+
+    public void AddDevice(Appliance device)
+    {
+        // TODO:
+        // Lägg till device i listan.
+        _devices.Add(device);
+    }
+
+    public void TurnOnAll()
+    {
+        // TODO:
+        // Loopa igenom alla devices och starta dem.
+        // Du får inte använda if/switch på specifika klasser.
+        foreach (Appliance device in _devices)
+        {
+            device.TurnOn();
+        }
+    }
+
+    public void TurnOffAll()
+    {
+        // TODO:
+        // Loopa igenom alla devices och stäng av dem.
+        foreach (Appliance device in _devices)
+        {
+            device.TurnOff();
+        }
+    }
+
+    public void PrintStatusReport()
+    {
+        // TODO:
+        // Loopa igenom alla devices.
+        // Skriv ut GetInfo() och om apparaten är på eller av.
+        foreach (Appliance device in _devices)
+        {
+            Console.WriteLine(device.GetInfo());
+        }
+    }
+
+    public double GetTotalDailyEnergyUsage()
+    {
+        // TODO:
+        // Räkna ihop GetDailyEnergyUsage() för alla devices.
+        // Returnera totalsumman.
+        double totalsumman = 0;
+        foreach (Appliance device in _devices)
+        {
+            totalsumman += device.GetDailyEnergyUsage();
+        }
+        return totalsumman;
+    }
+}
+
 public class Appliance
 {
     public string Brand { get; }
@@ -26,7 +83,6 @@ public class Appliance
     public virtual void TurnOff()
     {
         IsOn = false;
-        Console.WriteLine($"{Brand} has stopped.");
     }
 
     public virtual double GetDailyEnergyUsage()
@@ -47,7 +103,7 @@ public class Washer : Appliance
 
     public override string GetInfo()
     {
-        return $"{Brand} washer ({CapacityKg} kg) in {Room})";
+        return $"{Brand} washer ({CapacityKg} kg) in {Room} room - {(IsOn ? "ON" : "OFF")}";
     }
 
     public override void TurnOn()
@@ -78,7 +134,7 @@ public class Refrigerator : Appliance
 
     public override string GetInfo()
     {
-        return $"{Brand} refrigerator ({Temperature} C) in room {Room}";
+        return $"{Brand} refrigerator ({Temperature} C) in {Room} room - {(IsOn ? "ON" : "OFF")}";
     }
 
     public override void TurnOn()
@@ -110,7 +166,7 @@ public class Oven : Appliance
 
     public override string GetInfo()
     {
-        return $"{Brand} oven (Max temperature {MaxTemperature} C) in room {Room}";
+        return $"{Brand} oven (Max temperature {MaxTemperature} C) in {Room} room - {(IsOn ? "ON" : "OFF")}";
     }
     public override void TurnOn()
     {
@@ -141,7 +197,7 @@ public class RobotVacuum : Appliance
 
     public override string GetInfo()
     {
-        return $"{Brand} robot vacuum (batteryLevel = {BatteryLevel}) is in room {Room}";
+        return $"{Brand} robot vacuum (batteryLevel = {BatteryLevel}) is in {Room} room - {(IsOn ? "ON" : "OFF")}";
     }
 
     public override void TurnOn()
@@ -174,7 +230,7 @@ public class CoffeeMachine : Appliance
 
     public override string GetInfo()
     {
-        return $"{Brand} coffe machine ({CupsPerBrew} per brew) in room {Room}";
+        return $"{Brand} coffe machine ({CupsPerBrew} per brew) in {Room} room - {(IsOn ? "ON" : "OFF")}";
     }
 
     public override void TurnOn()
@@ -199,24 +255,24 @@ class Program
 {
     static void Main()
     {
-        List<Appliance> devices = new()
-        {
-          new Washer("LG"),
-          new Refrigerator("Samsung"),
-          new Oven("Elextrolux"),
-          new RobotVacuum("Xiamomi"),
-          new CoffeeMachine("Nespresso")
-        };
+        SmartHomeController controller = new SmartHomeController();
 
-        foreach (Appliance device in devices)
-        {
-            device.GetInfo();
-            device.TurnOn();
-            device.GetDailyEnergyUsage();
-            device.TurnOff();
-        }
+        controller.AddDevice(new Washer("LG", "Laundry", 7));
+        controller.AddDevice(new Refrigerator("Samsung", "Kitchen", 4));
+        controller.AddDevice(new Oven("Electrolux", "Kitchen", 250));
+        controller.AddDevice(new RobotVacuum("Xiaomi", "Living", 100));
+        controller.AddDevice(new CoffeeMachine("Nespresso", "Kitchen", 6));
 
+        controller.PrintStatusReport();
         Console.WriteLine();
+        controller.TurnOnAll();
+        Console.WriteLine();
+
+        double totalEnergy = controller.GetTotalDailyEnergyUsage();
+        Console.WriteLine($"Total daily energy usage: {totalEnergy} kWh");
+        Console.WriteLine();
+
+        controller.TurnOffAll();
     }
 
 
