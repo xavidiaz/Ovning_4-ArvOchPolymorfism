@@ -78,8 +78,8 @@ På GitHub: sätt **base = föregående branch**, inte master. Då visar varje P
 
 ## Status
 
-- [ ] Del 1 — bygg problemet (`List<object>`)
-- [ ] Del 2 — `CoffeeMachine`, känn smärtan
+- [x] Del 1 — bygg problemet (`List<object>`)
+- [x] Del 2 — `CoffeeMachine`, känn smärtan
 - [ ] Del 3 — basklass `Appliance`
 - [ ] Del 4 — fem child classes
 - [ ] Del 5 — `List<Appliance>`
