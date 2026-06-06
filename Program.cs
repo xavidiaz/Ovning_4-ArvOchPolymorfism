@@ -109,6 +109,7 @@ public class Appliance
     public virtual void TurnOn()
     {
         IsOn = true;
+        Console.WriteLine($"[Appliance] {Brand} turned On.");
     }
 
     // public void TurnOn()
@@ -152,13 +153,18 @@ public class Washer : Appliance, ISchedulable
         base.TurnOn();
         Console.WriteLine($"{Brand} washer starts washing program.");
     }
+
     //  public void TurnOn()
     // {
     //     base.TurnOn();
     //     Console.WriteLine($"{Brand} washer starts washing program.");
     // }
+    //
+    // FRÅGÅR
+    // TesT B: Vad händer? Får du en varning? Vad föreslår C# att du ska använda? 
     // ''warning CS0114: 'Washer.TurnOn()' hides inherited member 'Appliance.TurnOn()'. 
     // To make the current member override that implementation, add the override keyword. Otherwise add the new keyword.''
+    // Kompilator beskriver att ändring i parent-klass ska inte genomföras tills skrivs 'override' i child-metoden.
 
     public override void TurnOff()
     {
@@ -348,37 +354,68 @@ public class AirConditioner : Appliance
     }
 }
 
+public class SmartLamp : Appliance
+{
+    public int Brightness { get; set; }
+
+    public SmartLamp(string brand, string room, int brightness)
+        : base(brand, room)
+    {
+        Brightness = brightness;
+    }
+
+    public new void TurnOn()
+    {
+        // TODO:
+        // Skriv ut att lampan tänds.
+        Console.WriteLine($"[SmartLamp] {Brand} SmartLamp turned On.");
+    }
+}
+
+
+
 class Program
 {
     static void Main()
     {
-        SmartHomeController controller = new SmartHomeController();
+        // Del 6
+        // SmartHomeController controller = new SmartHomeController();
+        //
+        // controller.AddDevice(new Washer("LG", "Laundry", 7));
+        // controller.AddDevice(new Refrigerator("Samsung", "Kitchen", 4));
+        // controller.AddDevice(new Oven("Electrolux", "Kitchen", 250));
+        // controller.AddDevice(new RobotVacuum("Xiaomi", "Living", 100));
+        // controller.AddDevice(new CoffeeMachine("Nespresso", "Kitchen", 6));
+        // controller.AddDevice(new AirConditioner("Daikin", "Bedroom", 22));
+        //
+        // controller.PrintStatusReport();
+        // Console.WriteLine();
+        // controller.TurnOnAll();
+        // Console.WriteLine();
+        //
+        // double totalEnergy = controller.GetTotalDailyEnergyUsage();
+        // Console.WriteLine($"Total daily energy usage: {totalEnergy} kWh");
+        // Console.WriteLine();
+        //
+        // controller.TurnOffAll();
 
-        controller.AddDevice(new Washer("LG", "Laundry", 7));
-        controller.AddDevice(new Refrigerator("Samsung", "Kitchen", 4));
-        controller.AddDevice(new Oven("Electrolux", "Kitchen", 250));
-        controller.AddDevice(new RobotVacuum("Xiaomi", "Living", 100));
-        controller.AddDevice(new CoffeeMachine("Nespresso", "Kitchen", 6));
-        controller.AddDevice(new AirConditioner("Daikin", "Bedroom", 22));
+        // Del 9
+        // Console.WriteLine();
+        // controller.ScheduleAllSchedulableDevices(DateTime.Now.AddHours(2));
 
-        controller.PrintStatusReport();
+        // Del 11
         Console.WriteLine();
-        controller.TurnOnAll();
-        Console.WriteLine();
+        SmartLamp lamp1 = new SmartLamp("IKEA", "Hallway", 80); // 
+        Appliance lamp2 = lamp1;
 
-        double totalEnergy = controller.GetTotalDailyEnergyUsage();
-        Console.WriteLine($"Total daily energy usage: {totalEnergy} kWh");
-        Console.WriteLine();
-
-        controller.TurnOffAll();
-
-        Console.WriteLine();
-        controller.ScheduleAllSchedulableDevices(DateTime.Now.AddHours(2));
+        // lamp1.TurnOn();  // skrivs i konsolen.
+        lamp2.TurnOn(); // Skrivs INTE i konsolen.
     }
 
 
 }
 // FRÅGÅR
+//
 // 1. Varför behövde du kontrollera vilken typ varje objekt hade?
 // För att Anropa rött metod
 //
@@ -400,7 +437,9 @@ class Program
 // - 'ReportAllEnergy()'
 // Jag  hade att lägga till på 3 olika ställen.
 //
-// Frågor efter Del 5
+// FRÅGÅR
+// DEL 5
+//
 // 1. Varför fungerar device.TurnOn() trots att device har typen Appliance?
 // Etersom 'Appliance' klass har metoden 'TurnOn()'.
 // 
@@ -426,3 +465,21 @@ class Program
 // 5. Vad är skillnaden mellan arv och interface i det här exemplet?
 // - arv_ subklassen få properties och metoder från parent klass.
 // - interface_ är en kontrakt som garanteras att klasser med det ska ha properties och metoder som ör definieras i interfacen.
+//
+// FRÅGÅR
+// DEL 11
+//
+// 1. Blir utskriften samma?
+// Nej! I 'SmartLamp' fall printas 'Console.WriteLine()' från child-klassen. Utan i 'Appliance' fall printas ut 'Console.WriteLine()' från parent-klass.
+//
+// 2. Vilken metod körs när variabeln har typen SmartLamp?
+// Metoden i child-klass 'SmartLamp'
+//
+// 3. Vilken metod körs när variabeln har typen Appliance?
+// Metoden i parent-klass 'Appliance'.
+//
+// 4. Varför är detta farligt eller förvirrande?
+// 'override' enable polimorfism medan 'new' enable shadowing. Respektives modifieras och ersätts ursprung metod. Jag guisar att dem fyller olika behövs.
+//
+// 5. Vad händer om du byter new till override?
+//

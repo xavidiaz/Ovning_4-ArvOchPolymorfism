@@ -88,7 +88,7 @@ På GitHub: sätt **base = föregående branch**, inte master. Då visar varje P
 - [x] Del 8 — `ISchedulable`
 - [x] Del 9 — casting till interface
 - [x] Del 10 — labb `virtual` / `override`
-- [ ] Del 11 — labb `new`
+- [x] Del 11 — labb `new`
 - [ ] Del 12 — labb `sealed`
 - [ ] Del 13 — `List<ISchedulable>` (extra)
 - [ ] Del 14 — `FindDeviceByBrand` (extra)
