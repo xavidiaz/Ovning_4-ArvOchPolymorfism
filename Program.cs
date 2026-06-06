@@ -62,6 +62,35 @@ public class SmartHomeController
         }
         return totalsumman;
     }
+
+    // public void ScheduleAllDevicesWrong(DateTime time)
+    // {
+    //     foreach (Appliance device in _devices)
+    //     {
+    //         device.Schedule(time);
+    //     }
+    // }
+    // FRÅGÅR
+    // Varför kompilerar inte detta? Svara som kommentar.
+    // - Rättas 'devices' till '_devices'.
+    // - Eftersom inte alla devices has metod 'Schedule()', endast har det 'Washer', 'RobotVacuum', 'CoffeeMachine'.
+
+    public void ScheduleAllSchedulableDevices(DateTime time)
+    {
+        foreach (Appliance device in _devices)
+        {
+            // TODO:
+            // 1. Kontrollera om device implementerar ISchedulable.
+            // 2. Casta device till ISchedulable.
+            // 3. Anropa Schedule(time).
+
+            if (device is ISchedulable schedulable)
+            {
+                schedulable.Schedule(time);
+                Console.WriteLine($"{device} Scheduled for {time}");
+            }
+        }
+    }
 }
 
 public class Appliance
@@ -330,11 +359,14 @@ class Program
         Console.WriteLine();
 
         controller.TurnOffAll();
+
+        Console.WriteLine();
+        controller.ScheduleAllSchedulableDevices(DateTime.Now.AddHours(2));
     }
 
 
 }
-// FRÅGÅ
+// FRÅGÅR
 // 1. Varför behövde du kontrollera vilken typ varje objekt hade?
 // För att Anropa rött metod
 //
