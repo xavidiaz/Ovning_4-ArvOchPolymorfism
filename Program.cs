@@ -1,6 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 
+public interface ISchedulable
+{
+    DateTime NextRun { get; set; }
+    void Schedule(DateTime time);
+}
+
 public class SmartHomeController
 {
     private List<Appliance> _devices = new List<Appliance>();
@@ -92,9 +98,10 @@ public class Appliance
     }
 }
 
-public class Washer : Appliance
+public class Washer : Appliance, ISchedulable
 {
     public double CapacityKg { get; }
+    public DateTime NextRun { get; set; }
 
     public Washer(string brand, string room = "No assigned.", double capacityKg = 0) : base(brand, room)
     {
@@ -121,6 +128,13 @@ public class Washer : Appliance
     {
         return 1.2;
     }
+
+    public void Schedule(DateTime time)
+    {
+        NextRun = time;
+        Console.WriteLine($"{Brand} washer scheduled for {NextRun}.");
+    }
+
 }
 
 public class Refrigerator : Appliance
@@ -184,11 +198,13 @@ public class Oven : Appliance
     {
         return 2.5;
     }
+
 }
 
-public class RobotVacuum : Appliance
+public class RobotVacuum : Appliance, ISchedulable
 {
     public double BatteryLevel { get; }
+    public DateTime NextRun { get; set; }
 
     public RobotVacuum(string brand, string room = "No assigned.", double batteryLevel = 0) : base(brand, room)
     {
@@ -216,12 +232,19 @@ public class RobotVacuum : Appliance
     {
         return 0.4;
     }
+
+    public void Schedule(DateTime time)
+    {
+        NextRun = time;
+        Console.WriteLine($"{Brand} robot vacuum is scheduled for {NextRun}.");
+    }
 }
 
 
-public class CoffeeMachine : Appliance
+public class CoffeeMachine : Appliance, ISchedulable
 {
     public double CupsPerBrew { get; }
+    public DateTime NextRun { get; set; }
 
     public CoffeeMachine(string brand, string room = "No assigned.", int cups = 0) : base(brand, room)
     {
@@ -248,6 +271,12 @@ public class CoffeeMachine : Appliance
     public override double GetDailyEnergyUsage()
     {
         return 0.3;
+    }
+
+    public void Schedule(DateTime time)
+    {
+        NextRun = time;
+        Console.WriteLine($"{Brand} coffe machine is scheduled for {NextRun}.");
     }
 }
 
