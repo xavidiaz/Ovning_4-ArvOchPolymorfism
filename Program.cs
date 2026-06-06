@@ -70,6 +70,7 @@ public class SmartHomeController
     //         device.Schedule(time);
     //     }
     // }
+    //
     // FRÅGÅR
     // Varför kompilerar inte detta? Svara som kommentar.
     // - Rättas 'devices' till '_devices'.
@@ -79,11 +80,6 @@ public class SmartHomeController
     {
         foreach (Appliance device in _devices)
         {
-            // TODO:
-            // 1. Kontrollera om device implementerar ISchedulable.
-            // 2. Casta device till ISchedulable.
-            // 3. Anropa Schedule(time).
-
             if (device is ISchedulable schedulable)
             {
                 schedulable.Schedule(time);
@@ -114,6 +110,15 @@ public class Appliance
     {
         IsOn = true;
     }
+
+    // public void TurnOn()
+    // {
+    //     IsOn = true;
+    // }
+    // FRÅGÅR
+    // TEST A: Försök köra programmet utan 'virtual'. 
+    // Vad säger kompilatorn i dina child classes där du använder override? 
+    // '''error CS0506: '<child-class>.TurnOn()': cannot override inherited member 'Appliance.TurnOn()' because it is not marked virtual, abstract, or override'''
 
     public virtual void TurnOff()
     {
@@ -147,6 +152,13 @@ public class Washer : Appliance, ISchedulable
         base.TurnOn();
         Console.WriteLine($"{Brand} washer starts washing program.");
     }
+    //  public void TurnOn()
+    // {
+    //     base.TurnOn();
+    //     Console.WriteLine($"{Brand} washer starts washing program.");
+    // }
+    // ''warning CS0114: 'Washer.TurnOn()' hides inherited member 'Appliance.TurnOn()'. 
+    // To make the current member override that implementation, add the override keyword. Otherwise add the new keyword.''
 
     public override void TurnOff()
     {
@@ -397,3 +409,20 @@ class Program
 //
 // 3. Vad blev bättre jämfört med List<object>?
 // Det behövs inte längre declarers metoder 'RunMorningRoutine()' och 'ReportAllEnergy()'.
+//
+// Frågor efter Del 9
+// 1. Varför kan vi inte anropa Schedule() direkt på en variabel av typen Appliance?
+// Etersom inte alla class implementerar metod 'Schedule()'.
+//
+// 2. Varför fungerar det efter att vi castar till ISchedulable?
+// Etersom vi anropar metod 'Schedule()' endast för 'devides' som har metoden.
+//
+// 3. Vad betyder det att RobotVacuum både är en Appliance och en ISchedulable?
+// Att 'RobotVacuum' ärv från 'Appliance' och måste implementera kontrakt av interface 'ISchedulable'.
+//
+// 4. Varför ska inte Schedule() ligga direkt i Appliance?
+// Etersom devides som inte ska ha kontrakt med property och metod av interface 'ISchedulable' skulle ha det.
+//
+// 5. Vad är skillnaden mellan arv och interface i det här exemplet?
+// - arv_ subklassen få properties och metoder från parent klass.
+// - interface_ är en kontrakt som garanteras att klasser med det ska ha properties och metoder som ör definieras i interfacen.
