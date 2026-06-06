@@ -372,44 +372,55 @@ public class SmartLamp : Appliance
     }
 }
 
+public class PizzaOven : Oven
+{
+    public PizzaOven(string brand, string room, int maxTemperature)
+        : base(brand, room, maxTemperature)
+    {
+    }
 
+    public override void TurnOn()
+    {
+        Console.WriteLine("Pizza oven starts at extra high temperature.");
+    }
+}
 
 class Program
 {
     static void Main()
     {
         // Del 6
-        // SmartHomeController controller = new SmartHomeController();
-        //
-        // controller.AddDevice(new Washer("LG", "Laundry", 7));
-        // controller.AddDevice(new Refrigerator("Samsung", "Kitchen", 4));
-        // controller.AddDevice(new Oven("Electrolux", "Kitchen", 250));
-        // controller.AddDevice(new RobotVacuum("Xiaomi", "Living", 100));
-        // controller.AddDevice(new CoffeeMachine("Nespresso", "Kitchen", 6));
-        // controller.AddDevice(new AirConditioner("Daikin", "Bedroom", 22));
-        //
-        // controller.PrintStatusReport();
-        // Console.WriteLine();
-        // controller.TurnOnAll();
-        // Console.WriteLine();
-        //
-        // double totalEnergy = controller.GetTotalDailyEnergyUsage();
-        // Console.WriteLine($"Total daily energy usage: {totalEnergy} kWh");
-        // Console.WriteLine();
-        //
-        // controller.TurnOffAll();
+        SmartHomeController controller = new SmartHomeController();
+
+        controller.AddDevice(new Washer("LG", "Laundry", 7));
+        controller.AddDevice(new Refrigerator("Samsung", "Kitchen", 4));
+        controller.AddDevice(new Oven("Electrolux", "Kitchen", 250));
+        controller.AddDevice(new RobotVacuum("Xiaomi", "Living", 100));
+        controller.AddDevice(new CoffeeMachine("Nespresso", "Kitchen", 6));
+        controller.AddDevice(new AirConditioner("Daikin", "Bedroom", 22));
+
+        controller.PrintStatusReport();
+        Console.WriteLine();
+        controller.TurnOnAll();
+        Console.WriteLine();
+
+        double totalEnergy = controller.GetTotalDailyEnergyUsage();
+        Console.WriteLine($"Total daily energy usage: {totalEnergy} kWh");
+        Console.WriteLine();
+
+        controller.TurnOffAll();
 
         // Del 9
-        // Console.WriteLine();
-        // controller.ScheduleAllSchedulableDevices(DateTime.Now.AddHours(2));
+        Console.WriteLine();
+        controller.ScheduleAllSchedulableDevices(DateTime.Now.AddHours(2));
 
         // Del 11
         Console.WriteLine();
-        SmartLamp lamp1 = new SmartLamp("IKEA", "Hallway", 80); // 
+        SmartLamp lamp1 = new SmartLamp("IKEA", "Hallway", 80);
         Appliance lamp2 = lamp1;
 
-        // lamp1.TurnOn();  // skrivs i konsolen.
-        lamp2.TurnOn(); // Skrivs INTE i konsolen.
+        lamp1.TurnOn();
+        lamp2.TurnOn();
     }
 
 
@@ -436,7 +447,7 @@ class Program
 // - 'RunMorningRoutine()'
 // - 'ReportAllEnergy()'
 // Jag  hade att lägga till på 3 olika ställen.
-//
+
 // FRÅGÅR
 // DEL 5
 //
@@ -465,7 +476,7 @@ class Program
 // 5. Vad är skillnaden mellan arv och interface i det här exemplet?
 // - arv_ subklassen få properties och metoder från parent klass.
 // - interface_ är en kontrakt som garanteras att klasser med det ska ha properties och metoder som ör definieras i interfacen.
-//
+
 // FRÅGÅR
 // DEL 11
 //
@@ -479,7 +490,24 @@ class Program
 // Metoden i parent-klass 'Appliance'.
 //
 // 4. Varför är detta farligt eller förvirrande?
-// 'override' enable polimorfism medan 'new' enable shadowing. Respektives modifieras och ersätts ursprung metod. Jag guisar att dem fyller olika behövs.
+// Det förliga är att samma objekt beter sig olika beroende på vilken modifier använder man. Det kan vara svårt att felsöka.
+// 'override' enable polimorfism medan 'new' enable shadowing.
 //
 // 5. Vad händer om du byter new till override?
+// Med 'New' printas ut pakent-klass metod medan med 'override' printas ut child-klass.
+
+// FRÅGÅR
+// DEL 12
+//
+// 1. Vad säger kompilatorn?
+// ''error CS0239: 'PizzaOven.TurnOn()': cannot override inherited member 'Oven.TurnOn()' because it is sealed'''
+//
+// 2. Varför får PizzaOven inte override:a TurnOn()?
+// Eftersom 'sealed' modifier skydas parent-klass mot ändringar.
+//
+// 3. När kan det vara rimligt att använda sealed override?
+// När man vill att vissa metoder skall ändras inte för subklassen, försäkra att behåla grurnd-metod.
+//
+// 4. Vad kan PizzaOven fortfarande göra i stället? Kan den override:a någon annan metod?
+// Det kan overskriva allt utan menoder med 'sealed'
 //
