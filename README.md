@@ -90,8 +90,8 @@ På GitHub: sätt **base = föregående branch**, inte master. Då visar varje P
 - [x] Del 10 — labb `virtual` / `override`
 - [x] Del 11 — labb `new`
 - [x] Del 12 — labb `sealed`
-- [ ] Del 13 — `List<ISchedulable>` (extra)
-- [ ] Del 14 — `FindDeviceByBrand` (extra)
+- [x] Del 13 — `List<ISchedulable>` (extra)
+- [x] Del 14 — `FindDeviceByBrand` (extra)
 - [ ] Del 15 — `AirConditioner` (slututmaning)
 
 ## Begrepp att minnas

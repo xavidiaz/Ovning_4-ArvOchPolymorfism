@@ -101,6 +101,24 @@ public class SmartHomeController
 
         return result;
     }
+
+    public Appliance? FindDeviceByBrand(string brand)
+    {
+        // TODO:
+        // Returnera första apparaten med rätt brand.
+        // Om ingen finns kan du returnera null,
+        // eller kasta ett eget felmeddelande.
+
+        foreach (Appliance device in _devices)
+        {
+            if (device.Brand == brand)
+            {
+                return device;
+            }
+        }
+
+        return null;
+    }
 }
 
 public class Appliance
@@ -443,6 +461,14 @@ class Program
             // TODO:
             // Skriv ut NextRun eller schemalägg apparaten.
             Console.WriteLine($"Next run at: {schedulable.NextRun}");
+        }
+        // Del 14
+        Appliance? foundDevice = controller.FindDeviceByBrand("LG");
+
+        if (foundDevice != null && foundDevice is ISchedulable schedulableDevice)
+        {
+            foundDevice.TurnOn();
+            schedulableDevice.Schedule(DateTime.Now.AddHours(1));
         }
     }
 
