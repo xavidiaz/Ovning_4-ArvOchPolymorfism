@@ -87,6 +87,20 @@ public class SmartHomeController
             }
         }
     }
+    internal List<ISchedulable> GetSchedulableDevices()
+    {
+        List<ISchedulable> result = new List<ISchedulable>();
+
+        foreach (Appliance device in _devices)
+        {
+            if (device is ISchedulable schedulable)
+            {
+                result.Add(schedulable);
+            }
+        }
+
+        return result;
+    }
 }
 
 public class Appliance
@@ -421,6 +435,15 @@ class Program
 
         lamp1.TurnOn();
         lamp2.TurnOn();
+
+        List<ISchedulable> schedulableDevices = controller.GetSchedulableDevices();
+
+        foreach (ISchedulable schedulable in schedulableDevices)
+        {
+            // TODO:
+            // Skriv ut NextRun eller schemalägg apparaten.
+            Console.WriteLine($"Next run at: {schedulable.NextRun}");
+        }
     }
 
 
@@ -511,3 +534,7 @@ class Program
 // 4. Vad kan PizzaOven fortfarande göra i stället? Kan den override:a någon annan metod?
 // Det kan overskriva allt utan menoder med 'sealed'
 //
+// FRÅGÅR
+// DEL 13
+// Varför kan listan vara List<ISchedulable> även om objekten egentligen är olika klasser?
+// Eftersom, det som adderas är objekter under 'ISchedulable' interface.
