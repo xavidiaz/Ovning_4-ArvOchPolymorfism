@@ -359,9 +359,11 @@ public class CoffeeMachine : Appliance, ISchedulable
     }
 }
 
-public class AirConditioner : Appliance
+public class AirConditioner : Appliance, ISchedulable
 {
     public double TargetTemperature { get; }
+    public DateTime NextRun { get; set; }
+
     public AirConditioner(string brand, string room = "No assigned", int targetTemperature = 0) : base(brand, room)
     {
         TargetTemperature = targetTemperature;
@@ -383,6 +385,12 @@ public class AirConditioner : Appliance
     public override double GetDailyEnergyUsage()
     {
         return 4.5;
+    }
+
+    public void Schedule(DateTime time)
+    {
+        NextRun = time;
+        Console.WriteLine($"{Brand} air conditioner is scheduled for {NextRun}.");
     }
 }
 
